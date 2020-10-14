@@ -1,24 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import Profil from './Profil.js'
 
 function App() {
+  const [personnages,setPersonnages] = useState([]);
+
+  useEffect(()=> {
+    fetch('https://swapi.dev/api/people/')
+      .then(result => result.json())
+      .then(res => setPersonnages(res.results))
+      .then(()=> console.log(personnages))
+  }, [])
+
+  const listePersonnages = personnages.map(personnage => <li><Profil name={personnage.name} height={personnage.height} birth_year={personnage.birth_year}/></li>)
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ul>{listePersonnages}</ul>
     </div>
   );
 }
